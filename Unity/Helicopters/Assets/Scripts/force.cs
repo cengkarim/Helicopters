@@ -30,12 +30,26 @@ public class force : MonoBehaviour {
 		_initialPosition = _myTransform.position;
 		_initialRotation = _myTransform.rotation;
 	}
+
+	void Update ( )
+	{
+		if (Input.GetKeyDown (KeyCode.R) || Input.GetButtonDown ("Fire2")) {
+			_myTransform.rotation = _initialRotation;
+			_myTransform.position = _initialPosition;
+		}
+
+		if (Input.GetButtonDown ("Fire1")) {
+			MainCamera.enabled = !MainCamera.enabled;
+			MainCamera.GetComponent<AudioListener> ().enabled = MainCamera.enabled;
+			FirstPersonCamera.enabled = !MainCamera.enabled;
+			FirstPersonCamera.GetComponent<AudioListener> ().enabled = FirstPersonCamera.enabled;
+		}
+	}
 	
 	// Update is called once per frame
 	void FixedUpdate () {
 
 		var inputVal = Mathf.Clamp ( Input.GetAxisRaw ("R2") * inputMultiplier, 0.0f, maxForce );
-		Debug.Log ("R2: " + inputVal);
 
 		var verticalInput = Input.GetAxis ("Vertical");
 		var forwardInput = Mathf.Clamp (verticalInput, 0, 1);
@@ -64,20 +78,29 @@ public class force : MonoBehaviour {
 
 		_myRigidbody.AddForceAtPosition (rightSteerMultiplier * _myTransform.right, RotateLeft.transform.position);
 		_myRigidbody.AddForceAtPosition (leftSteerMultiplier * - _myTransform.right, RotateRight.transform.position);
-
-
-		if (Input.GetKeyDown (KeyCode.R)||Input.GetButtonDown ( "Fire2" ) ) {
-			_myTransform.rotation = _initialRotation;
-			_myTransform.position = _initialPosition;
-		}
-
-		if (Input.GetButtonDown ("Fire1")) {
-			MainCamera.enabled = ! MainCamera.enabled;
-			MainCamera.GetComponent<AudioListener> ().enabled = MainCamera.enabled;
-			FirstPersonCamera.enabled = !MainCamera.enabled;
-			FirstPersonCamera.GetComponent<AudioListener> ().enabled = FirstPersonCamera.enabled;
-		}
-
 	
+	}
+
+	void LateUpdate ( )
+	{
+		Debug.Log ("X: " + _myTransform.eulerAngles.x + ", Y: " + _myTransform.eulerAngles.y + ", Z: " + _myTransform.eulerAngles.z);
+
+		var xAngle = _myTransform.eulerAngles.x;
+		if (xAngle > 30.0f && xAngle <= 180.0f)
+			xAngle = 30.0f;
+		else if (xAngle < 330 && xAngle > 180.0f)
+			xAngle = 330.0f;
+
+		var zAngle = _myTransform.eulerAngles.z;
+		if (zAngle > 30.0f && zAngle <= 180.0f)
+			zAngle = 30.0f;
+		else if (zAngle < 330 && zAngle > 180.0f)
+			zAngle = 330.0f;
+
+		_myTransform.eulerAngles = new Vector3 (
+			xAngle,
+			_myTransform.eulerAngles.y,
+			zAngle
+		);
 	}
 }
