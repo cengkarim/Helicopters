@@ -7,6 +7,7 @@ public class force : MonoBehaviour {
 	public float directionMultiplier = 0.9f;
 	public float steerMultiplier = 1.0f;
 	public float maxForce = 4.0f;
+	public float rotationLimit = 20.0f;
 
 	public GameObject frontLeft;
 	public GameObject frontRight;
@@ -83,24 +84,21 @@ public class force : MonoBehaviour {
 
 	void LateUpdate ( )
 	{
-		Debug.Log ("X: " + _myTransform.eulerAngles.x + ", Y: " + _myTransform.eulerAngles.y + ", Z: " + _myTransform.eulerAngles.z);
-
-		var xAngle = _myTransform.eulerAngles.x;
-		if (xAngle > 30.0f && xAngle <= 180.0f)
-			xAngle = 30.0f;
-		else if (xAngle < 330 && xAngle > 180.0f)
-			xAngle = 330.0f;
-
-		var zAngle = _myTransform.eulerAngles.z;
-		if (zAngle > 30.0f && zAngle <= 180.0f)
-			zAngle = 30.0f;
-		else if (zAngle < 330 && zAngle > 180.0f)
-			zAngle = 330.0f;
-
-		_myTransform.eulerAngles = new Vector3 (
-			xAngle,
-			_myTransform.eulerAngles.y,
-			zAngle
+		_myRigidbody.transform.eulerAngles = new Vector3 (
+			ClampAngle360(_myRigidbody.transform.eulerAngles.x, rotationLimit),
+			_myRigidbody.transform.eulerAngles.y,
+			ClampAngle360(_myRigidbody.transform.eulerAngles.z, rotationLimit)
 		);
+	}
+
+	public static float ClampAngle360 ( float value, float limit )
+	{
+		if (value > limit && value <= 180.0f)
+			return limit;
+
+		if (value < 360.0f - limit && value > 180.0f)
+			return 360.0f - limit;
+
+		return value;
 	}
 }
