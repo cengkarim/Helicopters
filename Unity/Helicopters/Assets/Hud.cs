@@ -26,7 +26,6 @@ public class Hud : MonoBehaviour {
 		Physics.Raycast (playerGameObject.transform.position - Vector3.up, -Vector3.up, out groundHit);
 
 		helicopterThrottle = (playerGameObject.GetComponent<HelicopterController> ()).rotorVelocity;
-		Debug.Log (helicopterThrottle);
 
 		GUI.Label (new Rect (0, 0, 128, 128), altimeterTexture);
 		GUI.Label (new Rect (0, 128, 128, 128), throttleTexture [(int)(helicopterThrottle * 10)]);

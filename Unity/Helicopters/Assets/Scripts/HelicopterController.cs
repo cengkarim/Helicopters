@@ -20,7 +20,7 @@ public class HelicopterController : MonoBehaviour {
 	public float tailRotorVelocity = 0.0f;
 	private float tailRotorRotation = 0.0f;
 
-	public float forwardRotorTorqueMultiplier = 0.5f;
+	public float forwardRotorTorqueMultiplier = 2.0f;
 	public float sidewaysRotorTorqueMultiplier = 0.5f;
 
 	public bool mainRotorActive = true;
